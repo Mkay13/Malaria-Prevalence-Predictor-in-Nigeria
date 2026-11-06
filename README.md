@@ -1,13 +1,13 @@
 # Nigeria Malaria Prevalence Predictor
 
-A Streamlit application that estimates malaria prevalence for Nigerian states from annual mean temperature and total precipitation. It uses a pre-trained Random Forest model and displays the predicted prevalence as a percentage, together with a low, moderate, or high risk band.
+A Streamlit application that estimates malaria prevalence for Nigerian states from the survey year, annual mean temperature, and total precipitation. It uses a pre-trained Random Forest model and displays the predicted prevalence as a percentage, together with a low, moderate, or high risk band.
 
 This is a capstone project by a team of five data science mentees at EHA Clinics.
 
 ## Why use this project
 
 - Explore a model-based prevalence estimate for any of Nigeria's 36 states or the FCT.
-- Adjust temperature and precipitation interactively and see the prediction update.
+- Adjust the survey year, temperature, and precipitation interactively and see the prediction update.
 - Run the application locally with Python or deploy it using Docker Compose.
 
 The estimate is for exploration and educational purposes only. It is not a diagnosis, clinical decision, or substitute for official public-health data.
@@ -67,8 +67,9 @@ docker compose down
 ## Using the application
 
 1. Select a Nigerian state or the FCT from the sidebar.
-2. Set annual mean temperature (20–35 °C) and annual total precipitation (200–3,500 mm).
-3. Read the predicted malaria prevalence (RDT %) and its displayed risk band:
+2. Select a survey year from 2010 to 2030 (default: 2021). The selected year is passed to the model as `survey_year`; it identifies the survey year used for the estimate and is not a forecast horizon.
+3. Set annual mean temperature (20–35 °C) and annual total precipitation (200–3,500 mm).
+4. Read the predicted malaria prevalence (RDT %) and its displayed risk band:
    - Below 20%: low
    - 20% to below 45%: moderate
    - 45% or above: high
@@ -81,12 +82,12 @@ For setup or application questions, open an issue in the repository where you ob
 
 ## Maintainers and contributors
 
-The project is maintained by the EHA Clinics capstone team. The following contributors and roles were provided:
+The project is maintained by the EHA Clinics group 1 capstone project team. The following contributors and roles were provided:
 
-- **Peace Yilmwen** — Data Acquisition and Management
-- **Faith** — Data wrangling and exploratory Data Analysis (EDA)
-- **Khalifa Ashiru Danliman** — Statistics, Machine Learning, and Slide Development
-- **Muhammad Kabir** — Visualisation and Deployment
+- **Muhammad Kabir** — visualisation and deployment
+- **Khalifa Ashiru Danliman** — statistics, machine learning, and slide development
+- **Peace Yilmwen** — data acquisition and management
+- **Faith** — data wrangling and exploratory data analysis (EDA)
 
 The team has five mentees; the fifth member's name and contribution were not provided here.
 

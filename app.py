@@ -13,7 +13,7 @@ except:
 st.set_page_config(page_title="Nigeria Malaria Predictor by State", layout="centered")
 
 st.title("🦟 Nigeria Malaria Prevalence Predictor")
-st.write("Select any state in Nigeria along with annual weather conditions to predict malaria prevalence rate using our Random Forest model.")
+st.write("Select any state in Nigeria along with annual weather conditions and year to predict malaria prevalence rate using our Random Forest model.")
 
 st.sidebar.header("Input Settings")
 
@@ -27,7 +27,16 @@ selected_state = st.sidebar.selectbox(
              'Sokoto', 'Taraba', 'Yobe', 'Zamfara']
 )
 
-# 2. Climate Inputs
+# 2. Year Selector
+year_input = st.sidebar.slider(
+    "Select Year",
+    min_value=2010,
+    max_value=2030,
+    value=2021,
+    step=1
+)
+
+# 3. Climate Inputs
 temp_input = st.sidebar.slider(
     "Annual Mean Temperature (°C)",
     min_value=20.0,
@@ -44,22 +53,23 @@ rain_input = st.sidebar.slider(
     step=10.0
 )
 
-st.subheader(f"Prediction for {selected_state} State")
+st.subheader(f"Prediction for {selected_state} State ({year_input})")
 
 if model is not None and feature_cols is not None:
     input_row = {col: 0 for col in feature_cols}
+    input_row['survey_year'] = year_input
     input_row['annual_mean_temp_c'] = temp_input
     input_row['annual_total_precipitation_mm'] = rain_input
-    
+
     state_col = f'state_{selected_state}'
     if state_col in input_row:
         input_row[state_col] = 1
-        
+
     input_df = pd.DataFrame([input_row])[feature_cols]
     prediction = model.predict(input_df)[0]
-    
+
     st.metric(label="Predicted Malaria Prevalence (RDT %)", value=f"{prediction:.2f}%")
-    
+
     if prediction < 20:
         st.success("🟢 Low Prevalence Risk")
     elif prediction < 45:
