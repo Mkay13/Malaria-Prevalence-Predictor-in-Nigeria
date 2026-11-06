@@ -76,6 +76,35 @@ docker compose down
 
 The values are model estimates, not measured prevalence. This deployment repository contains the app and pre-trained model artifacts; it does not include the model-training pipeline or source dataset.
 
+## Project methodology
+
+The project workflow covers data acquisition, climate enrichment, analysis, model development, and deployment. The ETL, analysis, and training steps below describe the wider capstone workflow; their notebooks and source data are not included in this deployment repository.
+
+### 1. Data ETL pipeline
+
+- **Extract:** Query the live Demographic and Health Surveys (DHS) API for Nigeria (`countryIds=NG`) to retrieve state-level malaria prevalence measured by rapid diagnostic tests (RDTs), using indicator `ML_PMAL_C_RDT`.
+- **Transform:** Keep the survey year (`SurveyYear`), prevalence (`Value`), and confidence intervals. Normalize geographic names (for example, `.Kano` to `Kano`) and filter the records for Northern states.
+- **Load:** Write the national and Northern-state data to `national_malaria_prevalence` and `northern_malaria_prevalence` tables in a local SQLite database, `malaria_north.db`, using pandas `to_sql`.
+
+### 2. Climate feature enrichment
+
+- **Geospatial cross-reference:** Use representative latitude and longitude coordinates for Nigeria's 36 states and the Federal Capital Territory (FCT).
+- **Historical weather retrieval:** For each state and survey year, query the Open-Meteo Archive API for daily temperature and precipitation. Aggregate the daily observations into annual mean temperature (°C) and total precipitation (mm), which are used as model features.
+
+### 3. Statistical analysis and EDA
+
+Explore relationships between malaria prevalence and climate variables with regression plots and correlation heatmaps. The statistical analysis also examines skewness and kurtosis, tests normality with the Shapiro-Wilk test, and uses a Bayesian formulation to estimate the posterior probability of high malaria prevalence given low precipitation: `P(High Malaria | Low Rain)`.
+
+### 4. Machine learning and deep learning
+
+- **Random Forest regressor:** Train on survey year, climate measures, and one-hot encoded state features to predict continuous malaria prevalence. The deployed Streamlit app uses the pre-trained Random Forest model.
+- **Multi-layer perceptron (MLP):** The training work also explores a TensorFlow/Keras feed-forward neural network, using standardized features, dropout regularization, and dense layers to model non-linear relationships between climate and malaria prevalence. The MLP is not the model served by this deployment app.
+
+### 5. Streamlit application and Docker
+
+- **Streamlit interface:** In `app.py`, users select a state, survey year (2010–2030), annual mean temperature, and annual total precipitation. The app passes these inputs to the pre-trained Random Forest and displays a prevalence estimate and risk band: low, moderate, or high. The selected year is a model input, not a forecast horizon.
+- **Docker deployment:** `Dockerfile` and `docker-compose.yml` package and run the app in a Linux container, helping keep the deployment environment consistent across machines and cloud infrastructure.
+
 ## Help
 
 For setup or application questions, open an issue in the repository where you obtained this code, if issue tracking is enabled, or contact the project team. The dependency list is in [`requirements.txt`](requirements.txt), and Docker configuration is in [`Dockerfile`](Dockerfile) and [`docker-compose.yml`](docker-compose.yml).
