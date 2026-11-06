@@ -1,0 +1,8 @@
+version: '3.8'
+services:
+  malaria-predictor:
+    build: .
+    container_name: malaria_predictor_all_states
+    ports:
+      - "8501:8501"
+    restart: always
