@@ -83,10 +83,10 @@ For setup or application questions, open an issue in the repository where you ob
 
 The project is maintained by the EHA Clinics capstone team. The following contributors and roles were provided:
 
-- **Muhammad Kabir** — visualisation and deployment
-- **Khalifa Ashiru Danliman** — statistics, machine learning, and slide development
-- **Peace Yilmwen** — data acquisition and management
-- **Faith** — data wrangling and exploratory data analysis (EDA)
+- **Peace Yilmwen** — Data Acquisition and Management
+- **Faith** — Data wrangling and exploratory Data Analysis (EDA)
+- **Khalifa Ashiru Danliman** — Statistics, Machine Learning, and Slide Development
+- **Muhammad Kabir** — Visualisation and Deployment
 
 The team has five mentees; the fifth member's name and contribution were not provided here.
 
